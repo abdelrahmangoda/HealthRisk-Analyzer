@@ -20,255 +20,101 @@
     --heart: #e05a6a;
     --stroke: #4a9eff;
     --diabetes: #34d09a;
-    --accent: #7c6af7;
     --font: 'IBM Plex Sans Arabic', sans-serif;
     --mono: 'IBM Plex Mono', monospace;
   }
 
-  body {
-    font-family: var(--font);
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    line-height: 1.6;
-  }
+  body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.6; }
 
-  header {
-    border-bottom: 1px solid var(--border);
-    padding: 1.25rem 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: var(--surface);
-  }
+  header { border-bottom: 1px solid var(--border); padding: 1.25rem 2rem; display: flex; align-items: center; justify-content: space-between; background: var(--surface); }
 
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 16px;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-  }
+  .logo { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 600; }
 
-  .logo-dot {
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    background: var(--heart);
-    animation: pulse 2s infinite;
-  }
+  .logo-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--heart); animation: pulse 2s infinite; }
 
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.6; transform: scale(1.3); }
-  }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.6;transform:scale(1.3)} }
 
-  .status-badge {
-    font-family: var(--mono);
-    font-size: 11px;
-    padding: 4px 10px;
-    border-radius: 20px;
-    border: 1px solid rgba(52,208,154,0.3);
-    color: var(--diabetes);
-    background: rgba(52,208,154,0.08);
-  }
+  .status-badge { font-family: var(--mono); font-size: 11px; padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(52,208,154,0.3); color: var(--diabetes); background: rgba(52,208,154,0.08); }
 
   .container { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; }
 
-  .tabs {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 2rem;
-  }
+  .tabs { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 2rem; }
 
-  .tab {
-    border: 1px solid var(--border);
-    background: var(--surface);
-    border-radius: 12px;
-    padding: 1rem 1.25rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-align: right;
-  }
+  .tab { border: 1px solid var(--border); background: var(--surface); border-radius: 12px; padding: 1rem 1.25rem; cursor: pointer; transition: all 0.2s; text-align: right; }
 
   .tab:hover { border-color: var(--border2); background: var(--surface2); }
 
-  .tab.active-heart { border-color: var(--heart); background: rgba(224,90,106,0.08); }
-  .tab.active-stroke { border-color: var(--stroke); background: rgba(74,158,255,0.08); }
+  .tab.active-heart  { border-color: var(--heart);    background: rgba(224,90,106,0.08); }
+  .tab.active-stroke { border-color: var(--stroke);   background: rgba(74,158,255,0.08); }
   .tab.active-diabetes { border-color: var(--diabetes); background: rgba(52,208,154,0.08); }
 
-  .tab-icon {
-    width: 32px; height: 32px;
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px;
-    margin-bottom: 8px;
-  }
+  .tab-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; margin-bottom: 8px; }
 
-  .tab-heart .tab-icon { background: rgba(224,90,106,0.15); color: var(--heart); }
-  .tab-stroke .tab-icon { background: rgba(74,158,255,0.15); color: var(--stroke); }
+  .tab-heart   .tab-icon { background: rgba(224,90,106,0.15); color: var(--heart); }
+  .tab-stroke  .tab-icon { background: rgba(74,158,255,0.15); color: var(--stroke); }
   .tab-diabetes .tab-icon { background: rgba(52,208,154,0.15); color: var(--diabetes); }
 
   .tab-name { font-size: 14px; font-weight: 500; }
-  .tab-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .tab-sub  { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
-  .form-panel {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 1.75rem;
-    display: none;
-  }
-
+  .form-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem; display: none; }
   .form-panel.visible { display: block; }
 
-  .form-title {
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
+  .form-title { font-size: 18px; font-weight: 600; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px; }
 
-  .form-title-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-  }
-
-  .heart-dot { background: var(--heart); }
-  .stroke-dot { background: var(--stroke); }
+  .form-title-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .heart-dot    { background: var(--heart); }
+  .stroke-dot   { background: var(--stroke); }
   .diabetes-dot { background: var(--diabetes); }
 
-  .fields-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 14px;
-    margin-bottom: 1.5rem;
-  }
+  .fields-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 14px; margin-bottom: 1.5rem; }
 
   .field { display: flex; flex-direction: column; gap: 6px; }
 
-  label {
-    font-size: 12px;
-    color: var(--muted);
-    font-weight: 500;
-    letter-spacing: 0.02em;
-  }
+  label { font-size: 12px; color: var(--muted); font-weight: 500; letter-spacing: 0.02em; }
 
-  input, select {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 9px 12px;
-    color: var(--text);
-    font-family: var(--font);
-    font-size: 14px;
-    outline: none;
-    transition: border-color 0.15s;
-    width: 100%;
-  }
+  input, select { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 9px 12px; color: var(--text); font-family: var(--font); font-size: 14px; outline: none; transition: border-color 0.15s; width: 100%; }
 
   input:focus, select:focus { border-color: var(--border2); }
-
   select option { background: var(--surface2); }
 
-  .predict-btn {
-    width: 100%;
-    padding: 13px;
-    border-radius: 10px;
-    border: none;
-    font-family: var(--font);
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    letter-spacing: 0.01em;
-  }
+  .predict-btn { width: 100%; padding: 13px; border-radius: 10px; border: none; font-family: var(--font); font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
 
-  .btn-heart { background: var(--heart); color: #fff; }
-  .btn-stroke { background: var(--stroke); color: #fff; }
+  .btn-heart    { background: var(--heart);    color: #fff; }
+  .btn-stroke   { background: var(--stroke);   color: #fff; }
   .btn-diabetes { background: var(--diabetes); color: #0a0f1e; }
 
-  .predict-btn:hover { opacity: 0.88; transform: translateY(-1px); }
-  .predict-btn:active { transform: translateY(0); }
+  .predict-btn:hover   { opacity: 0.88; transform: translateY(-1px); }
+  .predict-btn:active  { transform: translateY(0); }
   .predict-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-  .result-panel {
-    margin-top: 1.25rem;
-    border-radius: 12px;
-    padding: 1.25rem;
-    display: none;
-    animation: fadeIn 0.3s ease;
-    border: 1px solid;
-  }
-
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-
+  .result-panel { margin-top: 1.25rem; border-radius: 12px; padding: 1.25rem; display: none; animation: fadeIn 0.3s ease; border: 1px solid; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
   .result-panel.show { display: block; }
 
-  .result-low { background: rgba(52,208,154,0.08); border-color: rgba(52,208,154,0.25); }
+  .result-low  { background: rgba(52,208,154,0.08); border-color: rgba(52,208,154,0.25); }
   .result-high { background: rgba(224,90,106,0.08); border-color: rgba(224,90,106,0.25); }
 
   .result-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-
-  .result-label { font-size: 13px; color: var(--muted); }
+  .result-label   { font-size: 13px; color: var(--muted); }
   .result-verdict { font-size: 15px; font-weight: 600; }
-  .verdict-low { color: var(--diabetes); }
+  .verdict-low  { color: var(--diabetes); }
   .verdict-high { color: var(--heart); }
 
-  .prob-bar-bg {
-    height: 6px;
-    background: var(--surface2);
-    border-radius: 3px;
-    overflow: hidden;
-    margin-top: 8px;
-  }
-
-  .prob-bar-fill {
-    height: 100%;
-    border-radius: 3px;
-    transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
-  }
-
-  .fill-low { background: var(--diabetes); }
+  .prob-bar-bg   { height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; margin-top: 8px; }
+  .prob-bar-fill { height: 100%; border-radius: 3px; transition: width 0.6s cubic-bezier(0.4,0,0.2,1); }
+  .fill-low  { background: var(--diabetes); }
   .fill-high { background: var(--heart); }
 
-  .prob-number {
-    font-family: var(--mono);
-    font-size: 28px;
-    font-weight: 500;
-    margin-top: 6px;
-  }
+  .prob-number { font-family: var(--mono); font-size: 28px; font-weight: 500; margin-top: 6px; }
 
-  .error-msg {
-    margin-top: 1rem;
-    padding: 12px;
-    border-radius: 8px;
-    background: rgba(224,90,106,0.08);
-    border: 1px solid rgba(224,90,106,0.25);
-    font-size: 13px;
-    color: #f09090;
-    display: none;
-  }
-
+  .error-msg { margin-top: 1rem; padding: 12px; border-radius: 8px; background: rgba(224,90,106,0.08); border: 1px solid rgba(224,90,106,0.25); font-size: 13px; color: #f09090; display: none; }
   .error-msg.show { display: block; }
 
-  .api-url {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--muted);
-    margin-bottom: 1.5rem;
-    padding: 8px 12px;
-    background: var(--surface2);
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
+  .api-url { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-bottom: 1.5rem; padding: 8px 12px; background: var(--surface2); border-radius: 6px; display: flex; align-items: center; gap: 8px; }
   .api-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--diabetes); }
+
+  .hint { font-size: 11px; color: var(--muted); margin-bottom: 1rem; padding: 8px 12px; background: var(--surface2); border-radius: 6px; border-right: 3px solid var(--heart); }
 </style>
 </head>
 <body>
@@ -305,87 +151,330 @@
     </div>
   </div>
 
-  <!-- HEART FORM -->
+  <!-- ═══════════════════════════════════════════════ HEART -->
   <div id="form-heart" class="form-panel visible">
     <div class="form-title">
       <div class="form-title-dot heart-dot"></div>
-      تحليل خطر أمراض القلب
+      تحليل خطر أمراض القلب والأوعية الدموية
+    </div>
+    <div class="hint">
+      💡 يتم حساب pulse pressure وbp severity وbmi_age تلقائياً
     </div>
     <div class="fields-grid">
-      <div class="field"><label>العمر (Age)</label><input type="number" id="h_age" placeholder="45" min="1" max="120"></div>
-      <div class="field"><label>الجنس (Sex) — 1=ذكر 0=أنثى</label><select id="h_sex"><option value="1">ذكر (1)</option><option value="0">أنثى (0)</option></select></div>
-      <div class="field"><label>نوع ألم الصدر (0-3)</label><input type="number" id="h_chest_pain" placeholder="0" min="0" max="3"></div>
-      <div class="field"><label>ضغط الدم (Resting BP)</label><input type="number" id="h_resting_bp" placeholder="120" min="50" max="250"></div>
-      <div class="field"><label>الكوليسترول (Cholesterol)</label><input type="number" id="h_cholesterol" placeholder="200" min="50" max="600"></div>
-      <div class="field"><label>سكر الصيام (0/1)</label><select id="h_fasting_bs"><option value="0">طبيعي (0)</option><option value="1">مرتفع (1)</option></select></div>
-      <div class="field"><label>ECG الراحة (0-2)</label><input type="number" id="h_resting_ecg" placeholder="0" min="0" max="2"></div>
-      <div class="field"><label>أقصى معدل قلب (Max HR)</label><input type="number" id="h_max_hr" placeholder="150" min="60" max="220"></div>
-      <div class="field"><label>ذبحة بالمجهود (0/1)</label><select id="h_exercise_angina"><option value="0">لا (0)</option><option value="1">نعم (1)</option></select></div>
-      <div class="field"><label>Oldpeak</label><input type="number" id="h_oldpeak" placeholder="1.0" step="0.1" min="0" max="10"></div>
-      <div class="field"><label>ST Slope (0-2)</label><input type="number" id="h_st_slope" placeholder="1" min="0" max="2"></div>
-      <div class="field"><label>Age Group (1-5)</label><input type="number" id="h_age_group" placeholder="3" min="1" max="5"></div>
-      <div class="field"><label>HR/Age Ratio</label><input type="number" id="h_hr_age_ratio" placeholder="3.3" step="0.1" min="0" max="10"></div>
-      <div class="field"><label>ضغط الدم المرتفع (0/1)</label><select id="h_hypertension"><option value="0">لا (0)</option><option value="1">نعم (1)</option></select></div>
-      <div class="field"><label>شدة ألم الصدر (0-3)</label><input type="number" id="h_chest_pain_severity" placeholder="1" min="0" max="3"></div>
+
+      <div class="field">
+        <label>العمر (سنة)</label>
+        <input type="number" id="h_age" placeholder="50" min="1" max="120">
+      </div>
+
+      <div class="field">
+        <label>الجنس</label>
+        <select id="h_gender">
+          <option value="1">أنثى (1)</option>
+          <option value="2">ذكر (2)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>الضغط الانقباضي — Systolic BP</label>
+        <input type="number" id="h_ap_hi" placeholder="120" min="60" max="250">
+      </div>
+
+      <div class="field">
+        <label>الضغط الانبساطي — Diastolic BP</label>
+        <input type="number" id="h_ap_lo" placeholder="80" min="40" max="200">
+      </div>
+
+      <div class="field">
+        <label>الكوليسترول</label>
+        <select id="h_cholesterol">
+          <option value="1">طبيعي (1)</option>
+          <option value="2">فوق الطبيعي (2)</option>
+          <option value="3">مرتفع جداً (3)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>الجلوكوز</label>
+        <select id="h_gluc">
+          <option value="1">طبيعي (1)</option>
+          <option value="2">فوق الطبيعي (2)</option>
+          <option value="3">مرتفع جداً (3)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>التدخين</label>
+        <select id="h_smoke">
+          <option value="0">لا يدخن (0)</option>
+          <option value="1">يدخن (1)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>الكحول</label>
+        <select id="h_alco">
+          <option value="0">لا (0)</option>
+          <option value="1">نعم (1)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>النشاط البدني</label>
+        <select id="h_active">
+          <option value="1">نشط (1)</option>
+          <option value="0">غير نشط (0)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>مؤشر كتلة الجسم — BMI</label>
+        <input type="number" id="h_bmi" placeholder="25.0" min="10" max="60" step="0.1">
+      </div>
+
     </div>
-    <button class="predict-btn btn-heart" onclick="predict('heart')">تحليل خطر القلب</button>
+    <button class="predict-btn btn-heart" onclick="predict('heart')">
+      تحليل خطر القلب
+    </button>
     <div id="result-heart" class="result-panel"></div>
     <div id="error-heart" class="error-msg"></div>
   </div>
 
-  <!-- STROKE FORM -->
+  <!-- ═══════════════════════════════════════════════ STROKE -->
   <div id="form-stroke" class="form-panel">
     <div class="form-title">
       <div class="form-title-dot stroke-dot"></div>
       تحليل خطر السكتة الدماغية
     </div>
     <div class="fields-grid">
-      <div class="field"><label>الجنس (Gender)</label><select id="s_gender"><option value="1">ذكر (1)</option><option value="0">أنثى (0)</option></select></div>
-      <div class="field"><label>العمر (Age)</label><input type="number" id="s_age" placeholder="45" min="1" max="120"></div>
-      <div class="field"><label>ضغط الدم المرتفع (0/1)</label><select id="s_hypertension"><option value="0">لا (0)</option><option value="1">نعم (1)</option></select></div>
-      <div class="field"><label>أمراض القلب (0/1)</label><select id="s_heart_disease"><option value="0">لا (0)</option><option value="1">نعم (1)</option></select></div>
-      <div class="field"><label>متزوج (0/1)</label><select id="s_ever_married"><option value="1">نعم (1)</option><option value="0">لا (0)</option></select></div>
-      <div class="field"><label>نوع السكن (0=ريف 1=مدينة)</label><select id="s_residence"><option value="1">مدينة (1)</option><option value="0">ريف (0)</option></select></div>
-      <div class="field"><label>متوسط الجلوكوز (Avg Glucose)</label><input type="number" id="s_glucose" placeholder="100" min="50" max="300" step="0.1"></div>
-      <div class="field"><label>مؤشر كتلة الجسم (BMI)</label><input type="number" id="s_bmi" placeholder="25" min="10" max="70" step="0.1"></div>
-      <div class="field"><label>عمل خاص Private (0/1)</label><select id="s_work_private"><option value="1">نعم (1)</option><option value="0">لا (0)</option></select></div>
-      <div class="field"><label>عمل حر Self-employed (0/1)</label><select id="s_work_self"><option value="0">لا (0)</option><option value="1">نعم (1)</option></select></div>
-      <div class="field"><label>أطفال children (0/1)</label><select id="s_work_children"><option value="0">لا (0)</option><option value="1">نعم (1)</option></select></div>
-      <div class="field"><label>كان يدخن سابقاً (0/1)</label><select id="s_smoke_former"><option value="0">لا (0)</option><option value="1">نعم (1)</option></select></div>
-      <div class="field"><label>لا يدخن أبداً (0/1)</label><select id="s_smoke_never"><option value="1">نعم (1)</option><option value="0">لا (0)</option></select></div>
-      <div class="field"><label>يدخن حالياً (0/1)</label><select id="s_smoke_current"><option value="0">لا (0)</option><option value="1">نعم (1)</option></select></div>
-      <div class="field"><label>كبير السن Elderly (0/1)</label><select id="s_elderly"><option value="0">لا (0)</option><option value="1">نعم (1)</option></select></div>
+
+      <div class="field">
+        <label>الجنس</label>
+        <select id="s_gender">
+          <option value="1">ذكر (1)</option>
+          <option value="0">أنثى (0)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>العمر (سنة)</label>
+        <input type="number" id="s_age" placeholder="45" min="1" max="120">
+      </div>
+
+      <div class="field">
+        <label>ضغط الدم المرتفع</label>
+        <select id="s_hypertension">
+          <option value="0">لا (0)</option>
+          <option value="1">نعم (1)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>أمراض القلب</label>
+        <select id="s_heart_disease">
+          <option value="0">لا (0)</option>
+          <option value="1">نعم (1)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>متزوج</label>
+        <select id="s_ever_married">
+          <option value="1">نعم (1)</option>
+          <option value="0">لا (0)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>نوع السكن</label>
+        <select id="s_residence">
+          <option value="1">مدينة (1)</option>
+          <option value="0">ريف (0)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>متوسط الجلوكوز</label>
+        <input type="number" id="s_glucose" placeholder="100" min="50" max="300" step="0.1">
+      </div>
+
+      <div class="field">
+        <label>مؤشر كتلة الجسم — BMI</label>
+        <input type="number" id="s_bmi" placeholder="25" min="10" max="70" step="0.1">
+      </div>
+
+      <div class="field">
+        <label>عمل خاص — Private</label>
+        <select id="s_work_private">
+          <option value="1">نعم (1)</option>
+          <option value="0">لا (0)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>عمل حر — Self-employed</label>
+        <select id="s_work_self">
+          <option value="0">لا (0)</option>
+          <option value="1">نعم (1)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>أطفال — Children</label>
+        <select id="s_work_children">
+          <option value="0">لا (0)</option>
+          <option value="1">نعم (1)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>دخّن سابقاً — Formerly smoked</label>
+        <select id="s_smoke_former">
+          <option value="0">لا (0)</option>
+          <option value="1">نعم (1)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>لا يدخن أبداً — Never smoked</label>
+        <select id="s_smoke_never">
+          <option value="1">نعم (1)</option>
+          <option value="0">لا (0)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>يدخن حالياً — Smokes</label>
+        <select id="s_smoke_current">
+          <option value="0">لا (0)</option>
+          <option value="1">نعم (1)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>كبير السن — Elderly</label>
+        <select id="s_elderly">
+          <option value="0">لا (0)</option>
+          <option value="1">نعم (1)</option>
+        </select>
+      </div>
+
     </div>
-    <button class="predict-btn btn-stroke" onclick="predict('stroke')">تحليل خطر السكتة</button>
+    <button class="predict-btn btn-stroke" onclick="predict('stroke')">
+      تحليل خطر السكتة
+    </button>
     <div id="result-stroke" class="result-panel"></div>
     <div id="error-stroke" class="error-msg"></div>
   </div>
 
-  <!-- DIABETES FORM -->
+  <!-- ═══════════════════════════════════════════════ DIABETES -->
   <div id="form-diabetes" class="form-panel">
     <div class="form-title">
       <div class="form-title-dot diabetes-dot"></div>
       تحليل خطر السكري
     </div>
     <div class="fields-grid">
-      <div class="field"><label>الجنس (Gender)</label><select id="d_gender"><option value="1">ذكر (1)</option><option value="0">أنثى (0)</option></select></div>
-      <div class="field"><label>العمر (Age)</label><input type="number" id="d_age" placeholder="40" min="1" max="120"></div>
-      <div class="field"><label>ضغط الدم المرتفع (0/1)</label><select id="d_hypertension"><option value="0">لا (0)</option><option value="1">نعم (1)</option></select></div>
-      <div class="field"><label>أمراض القلب (0/1)</label><select id="d_heart_disease"><option value="0">لا (0)</option><option value="1">نعم (1)</option></select></div>
-      <div class="field"><label>مؤشر كتلة الجسم (BMI)</label><input type="number" id="d_bmi" placeholder="27" min="10" max="70" step="0.1"></div>
-      <div class="field"><label>مستوى HbA1c</label><input type="number" id="d_hba1c" placeholder="5.5" min="3" max="15" step="0.1"></div>
-      <div class="field"><label>مستوى الجلوكوز بالدم</label><input type="number" id="d_glucose" placeholder="100" min="50" max="400"></div>
-      <div class="field"><label>No Info تدخين (0/1)</label><select id="d_smoke_noinfo"><option value="0">لا (0)</option><option value="1">نعم (1)</option></select></div>
-      <div class="field"><label>يدخن حالياً (0/1)</label><select id="d_smoke_current"><option value="0">لا (0)</option><option value="1">نعم (1)</option></select></div>
-      <div class="field"><label>دخّن في الماضي Ever (0/1)</label><select id="d_smoke_ever"><option value="0">لا (0)</option><option value="1">نعم (1)</option></select></div>
-      <div class="field"><label>دخّن سابقاً Former (0/1)</label><select id="d_smoke_former"><option value="0">لا (0)</option><option value="1">نعم (1)</option></select></div>
-      <div class="field"><label>لم يدخن أبداً Never (0/1)</label><select id="d_smoke_never"><option value="1">نعم (1)</option><option value="0">لا (0)</option></select></div>
-      <div class="field"><label>Not current (0/1)</label><select id="d_smoke_notcurrent"><option value="0">لا (0)</option><option value="1">نعم (1)</option></select></div>
+
+      <div class="field">
+        <label>الجنس</label>
+        <select id="d_gender">
+          <option value="1">ذكر (1)</option>
+          <option value="0">أنثى (0)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>العمر (سنة)</label>
+        <input type="number" id="d_age" placeholder="40" min="1" max="120">
+      </div>
+
+      <div class="field">
+        <label>ضغط الدم المرتفع</label>
+        <select id="d_hypertension">
+          <option value="0">لا (0)</option>
+          <option value="1">نعم (1)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>أمراض القلب</label>
+        <select id="d_heart_disease">
+          <option value="0">لا (0)</option>
+          <option value="1">نعم (1)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>مؤشر كتلة الجسم — BMI</label>
+        <input type="number" id="d_bmi" placeholder="27" min="10" max="70" step="0.1">
+      </div>
+
+      <div class="field">
+        <label>مستوى HbA1c</label>
+        <input type="number" id="d_hba1c" placeholder="5.5" min="3" max="15" step="0.1">
+      </div>
+
+      <div class="field">
+        <label>مستوى الجلوكوز بالدم</label>
+        <input type="number" id="d_glucose" placeholder="100" min="50" max="400">
+      </div>
+
+      <div class="field">
+        <label>تدخين — No Info</label>
+        <select id="d_smoke_noinfo">
+          <option value="0">لا (0)</option>
+          <option value="1">نعم (1)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>يدخن حالياً — Current</label>
+        <select id="d_smoke_current">
+          <option value="0">لا (0)</option>
+          <option value="1">نعم (1)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>دخّن في الماضي — Ever</label>
+        <select id="d_smoke_ever">
+          <option value="0">لا (0)</option>
+          <option value="1">نعم (1)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>دخّن سابقاً — Former</label>
+        <select id="d_smoke_former">
+          <option value="0">لا (0)</option>
+          <option value="1">نعم (1)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>لم يدخن أبداً — Never</label>
+        <select id="d_smoke_never">
+          <option value="1">نعم (1)</option>
+          <option value="0">لا (0)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>لا يدخن حالياً — Not current</label>
+        <select id="d_smoke_notcurrent">
+          <option value="0">لا (0)</option>
+          <option value="1">نعم (1)</option>
+        </select>
+      </div>
+
     </div>
-    <button class="predict-btn btn-diabetes" onclick="predict('diabetes')">تحليل خطر السكري</button>
+    <button class="predict-btn btn-diabetes" onclick="predict('diabetes')">
+      تحليل خطر السكري
+    </button>
     <div id="result-diabetes" class="result-panel"></div>
     <div id="error-diabetes" class="error-msg"></div>
   </div>
+
 </div>
 
 <script>
@@ -393,75 +482,129 @@ const API = 'http://127.0.0.1:8000';
 
 function switchTab(type) {
   ['heart','stroke','diabetes'].forEach(t => {
-    document.getElementById('form-'+t).classList.remove('visible');
-    document.querySelectorAll('.tab').forEach(tab => {
-      tab.classList.remove('active-heart','active-stroke','active-diabetes');
-    });
+    document.getElementById('form-' + t).classList.remove('visible');
   });
-  document.getElementById('form-'+type).classList.add('visible');
-  const tabs = document.querySelectorAll('.tab');
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.classList.remove('active-heart','active-stroke','active-diabetes');
+  });
+  document.getElementById('form-' + type).classList.add('visible');
   const idx = ['heart','stroke','diabetes'].indexOf(type);
-  tabs[idx].classList.add('active-'+type);
+  document.querySelectorAll('.tab')[idx].classList.add('active-' + type);
 }
 
 function g(id) {
   const el = document.getElementById(id);
-  return el ? parseFloat(el.value) || 0 : 0;
+  return el ? (parseFloat(el.value) || 0) : 0;
 }
 
 function getPayload(type) {
-  if (type === 'heart') return {
-    age: g('h_age'), sex: g('h_sex'), chest_pain: g('h_chest_pain'),
-    resting_bp: g('h_resting_bp'), cholesterol: g('h_cholesterol'),
-    fasting_bs: g('h_fasting_bs'), resting_ecg: g('h_resting_ecg'),
-    max_hr: g('h_max_hr'), exercise_angina: g('h_exercise_angina'),
-    oldpeak: g('h_oldpeak'), st_slope: g('h_st_slope'),
-    age_group: g('h_age_group'), hr_age_ratio: g('h_hr_age_ratio'),
-    hypertension: g('h_hypertension'), chest_pain_severity: g('h_chest_pain_severity')
-  };
-  if (type === 'stroke') return {
-    gender: g('s_gender'), age: g('s_age'), hypertension: g('s_hypertension'),
-    heart_disease: g('s_heart_disease'), ever_married: g('s_ever_married'),
-    Residence_type: g('s_residence'), avg_glucose_level: g('s_glucose'),
-    bmi: g('s_bmi'), work_type_Private: g('s_work_private'),
-    'work_type_Self-employed': g('s_work_self'), work_type_children: g('s_work_children'),
-    'smoking_status_formerly smoked': g('s_smoke_former'),
-    'smoking_status_never smoked': g('s_smoke_never'),
-    smoking_status_smokes: g('s_smoke_current'), is_elderly: g('s_elderly')
-  };
-  if (type === 'diabetes') return {
-    gender: g('d_gender'), age: g('d_age'), hypertension: g('d_hypertension'),
-    heart_disease: g('d_heart_disease'), bmi: g('d_bmi'),
-    hbA1c_level: g('d_hba1c'), blood_glucose_level: g('d_glucose'),
-    'smoking_history_No Info': g('d_smoke_noinfo'),
-    smoking_history_current: g('d_smoke_current'),
-    smoking_history_ever: g('d_smoke_ever'),
-    smoking_history_former: g('d_smoke_former'),
-    smoking_history_never: g('d_smoke_never'),
-    'smoking_history_not current': g('d_smoke_notcurrent')
-  };
+
+  // ── HEART ──────────────────────────────────────────────
+  if (type === 'heart') {
+    const age   = g('h_age');
+    const ap_hi = g('h_ap_hi');
+    const ap_lo = g('h_ap_lo');
+    const bmi   = g('h_bmi');
+    const smoke = g('h_smoke');
+
+    // حساب الـ engineered features تلقائياً
+    const pulse_pressure = ap_hi - ap_lo;
+
+    let bp_severity = 0;
+    if      (ap_hi >= 160) bp_severity = 4;
+    else if (ap_hi >= 140) bp_severity = 3;
+    else if (ap_hi >= 130) bp_severity = 2;
+    else if (ap_hi >= 120) bp_severity = 1;
+
+    const bmi_age   = Math.round(bmi   * age * 100) / 100;
+    const smoke_age = Math.round(smoke * age * 100) / 100;
+
+    return {
+      age          : age,
+      gender       : g('h_gender'),
+      ap_hi        : ap_hi,
+      ap_lo        : ap_lo,
+      cholesterol  : g('h_cholesterol'),
+      gluc         : g('h_gluc'),
+      smoke        : smoke,
+      alco         : g('h_alco'),
+      active       : g('h_active'),
+      bmi          : bmi,
+      pulse_pressure : pulse_pressure,
+      bp_severity    : bp_severity,
+      bmi_age        : bmi_age,
+      smoke_age      : smoke_age,
+    };
+  }
+
+  // ── STROKE ─────────────────────────────────────────────
+  if (type === 'stroke') {
+    return {
+      gender                          : g('s_gender'),
+      age                             : g('s_age'),
+      hypertension                    : g('s_hypertension'),
+      heart_disease                   : g('s_heart_disease'),
+      ever_married                    : g('s_ever_married'),
+      Residence_type                  : g('s_residence'),
+      avg_glucose_level               : g('s_glucose'),
+      bmi                             : g('s_bmi'),
+      work_type_Private               : g('s_work_private'),
+      'work_type_Self-employed'       : g('s_work_self'),
+      work_type_children              : g('s_work_children'),
+      'smoking_status_formerly smoked': g('s_smoke_former'),
+      'smoking_status_never smoked'   : g('s_smoke_never'),
+      smoking_status_smokes           : g('s_smoke_current'),
+      is_elderly                      : g('s_elderly'),
+    };
+  }
+
+  // ── DIABETES ───────────────────────────────────────────
+  if (type === 'diabetes') {
+    return {
+      gender                        : g('d_gender'),
+      age                           : g('d_age'),
+      hypertension                  : g('d_hypertension'),
+      heart_disease                 : g('d_heart_disease'),
+      bmi                           : g('d_bmi'),
+      hbA1c_level                   : g('d_hba1c'),
+      blood_glucose_level           : g('d_glucose'),
+      'smoking_history_No Info'     : g('d_smoke_noinfo'),
+      smoking_history_current       : g('d_smoke_current'),
+      smoking_history_ever          : g('d_smoke_ever'),
+      smoking_history_former        : g('d_smoke_former'),
+      smoking_history_never         : g('d_smoke_never'),
+      'smoking_history_not current' : g('d_smoke_notcurrent'),
+    };
+  }
 }
 
 async function predict(type) {
-  const btn = document.querySelector('#form-'+type+' .predict-btn');
-  const resultDiv = document.getElementById('result-'+type);
-  const errorDiv = document.getElementById('error-'+type);
-  
-  btn.disabled = true;
+  const btn       = document.querySelector('#form-' + type + ' .predict-btn');
+  const resultDiv = document.getElementById('result-'  + type);
+  const errorDiv  = document.getElementById('error-'   + type);
+
+  btn.disabled    = true;
   btn.textContent = 'جاري التحليل...';
   resultDiv.classList.remove('show');
   errorDiv.classList.remove('show');
 
   try {
-    const res = await fetch(API+'/predict/'+type, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(getPayload(type))
+    const payload = getPayload(type);
+    console.log('Sending to API:', payload);
+
+    const res = await fetch(API + '/predict/' + type, {
+      method  : 'POST',
+      headers : { 'Content-Type': 'application/json' },
+      body    : JSON.stringify(payload),
     });
 
-    if (!res.ok) throw new Error('HTTP '+res.status);
-    const data = await res.json();
-    const prob = Math.round(data.probability * 100);
+    if (!res.ok) {
+      const errText = await res.text();
+      throw new Error('HTTP ' + res.status + ' — ' + errText);
+    }
+
+    const data   = await res.json();
+    const prob   = Math.round(data.probability * 100);
     const isHigh = data.prediction === 1;
 
     resultDiv.className = 'result-panel show ' + (isHigh ? 'result-high' : 'result-low');
@@ -469,26 +612,35 @@ async function predict(type) {
       <div class="result-header">
         <div class="result-label">نتيجة التحليل</div>
         <div class="result-verdict ${isHigh ? 'verdict-high' : 'verdict-low'}">
-          ${isHigh ? 'خطر مرتفع' : 'خطر منخفض'}
+          ${isHigh ? '⚠️ خطر مرتفع' : '✅ خطر منخفض'}
         </div>
       </div>
-      <div class="prob-number" style="color:${isHigh ? 'var(--heart)' : 'var(--diabetes)'}">${prob}%</div>
+      <div class="prob-number" style="color:${isHigh ? 'var(--heart)' : 'var(--diabetes)'}">
+        ${prob}%
+      </div>
       <div style="font-size:12px;color:var(--muted);margin-top:2px;">احتمالية الإصابة</div>
       <div class="prob-bar-bg">
-        <div class="prob-bar-fill ${isHigh ? 'fill-high' : 'fill-low'}" style="width:0%" id="bar-${type}"></div>
+        <div class="prob-bar-fill ${isHigh ? 'fill-high' : 'fill-low'}"
+             style="width:0%" id="bar-${type}"></div>
       </div>
     `;
+
     setTimeout(() => {
-      const bar = document.getElementById('bar-'+type);
+      const bar = document.getElementById('bar-' + type);
       if (bar) bar.style.width = prob + '%';
     }, 50);
 
-  } catch(err) {
-    errorDiv.textContent = 'خطأ في الاتصال بالـ API — تأكد إن السيرفر شغال على http://127.0.0.1:8000';
+  } catch (err) {
+    console.error(err);
+    errorDiv.textContent = 'خطأ: ' + err.message;
     errorDiv.classList.add('show');
+
   } finally {
     btn.disabled = false;
-    btn.textContent = type === 'heart' ? 'تحليل خطر القلب' : type === 'stroke' ? 'تحليل خطر السكتة' : 'تحليل خطر السكري';
+    btn.textContent =
+      type === 'heart'    ? 'تحليل خطر القلب'   :
+      type === 'stroke'   ? 'تحليل خطر السكتة'  :
+                            'تحليل خطر السكري';
   }
 }
 </script>

@@ -4,6 +4,7 @@
 
 import os
 import pickle
+import joblib
 import pandas as pd
 from pathlib import Path
 
@@ -24,8 +25,8 @@ app.add_middleware(
 # PATHS
 # ============================================================
 
-BASE_DIR     = Path(__file__).resolve().parent          # .../HealthRisk-Analyzer/api
-PROJECT_DIR  = BASE_DIR.parent                          # .../HealthRisk-Analyzer
+BASE_DIR     = Path(__file__).resolve().parent
+PROJECT_DIR  = BASE_DIR.parent
 MODELS_DIR   = PROJECT_DIR / "models"
 FRONTEND_DIR = PROJECT_DIR / "frontend"
 
@@ -39,74 +40,79 @@ print(f"📁 FRONTEND_DIR : {FRONTEND_DIR}")
 # HELPERS
 # ============================================================
 
-def load_pkl(path: Path):
-    with open(path, "rb") as f:
-        return pickle.load(f)
+def load_any(path: Path):
+    """Try pickle first, then joblib"""
+    # Try pickle
+    try:
+        with open(path, "rb") as f:
+            obj = pickle.load(f)
+        return obj
+    except Exception:
+        pass
+
+    # Try joblib
+    try:
+        obj = joblib.load(path)
+        return obj
+    except Exception:
+        pass
+
+    raise ValueError(f"Could not load with pickle or joblib: {path}")
+
 
 def safe_load(path: Path, name: str):
+    """Load file safely with error handling"""
     try:
-        obj = load_pkl(path)
+        obj = load_any(path)
         print(f"✅ {name} loaded -> {path}")
         return obj
     except Exception as e:
-        print(f"⚠️  {name} not found -> {path}")
+        print(f"⚠️  {name} FAILED -> {path}")
         print(f"    Reason: {e}")
         return None
 
 
 # ============================================================
-# LOAD HEART FILES
+# LOAD HEART
 # ============================================================
 
-heart_model_path    = MODELS_DIR / "heart" / "best_model.pkl"
-heart_features_path = MODELS_DIR / "heart" / "feature_names.pkl"
-heart_meta_path     = MODELS_DIR / "heart" / "meta.pkl"
-
-heart_model    = safe_load(heart_model_path,    "Heart model")
-heart_features = safe_load(heart_features_path, "Heart features")
-heart_meta     = safe_load(heart_meta_path,     "Heart meta")
+heart_model    = safe_load(MODELS_DIR / "heart" / "best_model.pkl",      "Heart model")
+heart_features = safe_load(MODELS_DIR / "heart" / "feature_names.pkl",   "Heart features")
+heart_meta     = safe_load(MODELS_DIR / "heart" / "meta.pkl",            "Heart meta")
 
 heart_threshold = 0.35
 if heart_meta and isinstance(heart_meta, dict) and "threshold" in heart_meta:
     heart_threshold = heart_meta["threshold"]
 
 if heart_features:
-    print(f"🫀 Heart threshold: {heart_threshold}")
-    print(f"🫀 Heart features : {heart_features}")
+    print(f"🫀 Heart threshold : {heart_threshold}")
+    print(f"🫀 Heart features  : {heart_features}")
 
 
 # ============================================================
-# LOAD STROKE FILES
+# LOAD STROKE
 # ============================================================
 
-stroke_model_path    = MODELS_DIR / "stroke" / "best_model.pkl"
-stroke_features_path = MODELS_DIR / "stroke" / "feature_list.pkl"
-stroke_scaler_path   = MODELS_DIR / "stroke" / "scaler.pkl"
-
-stroke_model    = safe_load(stroke_model_path,    "Stroke model")
-stroke_features = safe_load(stroke_features_path, "Stroke feature list")
-stroke_scaler   = safe_load(stroke_scaler_path,   "Stroke scaler")
+stroke_model    = safe_load(MODELS_DIR / "stroke" / "best_model.pkl",      "Stroke model")
+stroke_features = safe_load(MODELS_DIR / "stroke" / "feature_list.pkl",    "Stroke features")
+stroke_scaler   = safe_load(MODELS_DIR / "stroke" / "scaler.pkl",          "Stroke scaler")
 stroke_threshold = 0.5
 
 if stroke_features:
-    print(f"🧠 Stroke features: {stroke_features}")
+    print(f"🧠 Stroke features : {stroke_features}")
 
 
 # ============================================================
-# LOAD DIABETES FILES
+# LOAD DIABETES
 # ============================================================
 
-diabetes_model_path    = MODELS_DIR / "diabetes" / "best_model.pkl"
-diabetes_features_path = MODELS_DIR / "diabetes" / "feature_list.pkl"
-diabetes_scaler_path   = MODELS_DIR / "diabetes" / "scaler.pkl"
-
-diabetes_model    = safe_load(diabetes_model_path,    "Diabetes model")
-diabetes_features = safe_load(diabetes_features_path, "Diabetes feature list")
-diabetes_scaler   = safe_load(diabetes_scaler_path,   "Diabetes scaler")
+diabetes_model    = safe_load(MODELS_DIR / "diabetes" / "best_model.pkl",      "Diabetes model")
+diabetes_features = safe_load(MODELS_DIR / "diabetes" / "feature_list.pkl",    "Diabetes features")
+diabetes_scaler   = safe_load(MODELS_DIR / "diabetes" / "scaler.pkl",          "Diabetes scaler")
 diabetes_threshold = 0.5
 
 if diabetes_features:
-    print(f"🩺 Diabetes features: {diabetes_features}")
+    print(f"🩺 Diabetes features : {diabetes_features}")
 
 
 # ============================================================
@@ -115,11 +121,11 @@ if diabetes_features:
 
 def engineer_heart_features(raw: dict) -> dict:
     """
-    Frontend sends:
-      age, gender, ap_hi, ap_lo, cholesterol, gluc,
-      smoke, alco, active, bmi
+    Frontend sends 10 fields:
+      age, gender, ap_hi, ap_lo, cholesterol,
+      gluc, smoke, alco, active, bmi
 
-    We generate:
+    We calculate 4 more:
       pulse_pressure, bp_severity, bmi_age, smoke_age
     """
     raw = dict(raw)
@@ -130,19 +136,17 @@ def engineer_heart_features(raw: dict) -> dict:
     bmi   = float(raw["bmi"])
     smoke = float(raw["smoke"])
 
+    # Pulse Pressure
     raw["pulse_pressure"] = ap_hi - ap_lo
 
-    if ap_hi >= 160:
-        raw["bp_severity"] = 4
-    elif ap_hi >= 140:
-        raw["bp_severity"] = 3
-    elif ap_hi >= 130:
-        raw["bp_severity"] = 2
-    elif ap_hi >= 120:
-        raw["bp_severity"] = 1
-    else:
-        raw["bp_severity"] = 0
+    # BP Severity (5 levels)
+    if   ap_hi >= 160: raw["bp_severity"] = 4
+    elif ap_hi >= 140: raw["bp_severity"] = 3
+    elif ap_hi >= 130: raw["bp_severity"] = 2
+    elif ap_hi >= 120: raw["bp_severity"] = 1
+    else:              raw["bp_severity"] = 0
 
+    # Interactions
     raw["bmi_age"]   = round(bmi * age, 2)
     raw["smoke_age"] = round(smoke * age, 2)
 
@@ -150,12 +154,17 @@ def engineer_heart_features(raw: dict) -> dict:
 
 
 # ============================================================
-# GENERIC PREDICTION HELPERS
+# PREDICTION — WITHOUT SCALER (Heart)
 # ============================================================
 
-def predict_with_dataframe(model, feature_names, raw_data, threshold=0.5, engineer_fn=None):
+def predict_direct(model, feature_names, raw_data,
+                   threshold=0.5, engineer_fn=None):
+    """
+    Predict directly (no scaler needed).
+    Used for Heart model.
+    """
     if model is None:
-        raise HTTPException(status_code=503, detail="Model not loaded")
+        raise HTTPException(503, "Model not loaded")
 
     data = dict(raw_data)
 
@@ -166,7 +175,7 @@ def predict_with_dataframe(model, feature_names, raw_data, threshold=0.5, engine
         try:
             df = pd.DataFrame([data])[feature_names]
         except KeyError as e:
-            raise HTTPException(status_code=422, detail=f"Missing feature: {e}")
+            raise HTTPException(422, f"Missing feature: {e}")
     else:
         df = pd.DataFrame([data])
 
@@ -174,37 +183,56 @@ def predict_with_dataframe(model, feature_names, raw_data, threshold=0.5, engine
     pred  = int(proba >= threshold)
 
     return {
-        "prediction": pred,
+        "prediction" : pred,
         "probability": round(proba, 4),
-        "risk_level": "HIGH" if pred == 1 else "LOW",
-        "threshold": threshold
+        "risk_level" : "HIGH" if pred == 1 else "LOW",
+        "threshold"  : threshold,
     }
 
 
-def predict_with_scaler(model, feature_names, scaler, raw_data, threshold=0.5):
+# ============================================================
+# PREDICTION — WITH SCALER (Stroke, Diabetes)
+# ============================================================
+
+def predict_scaled(model, feature_names, scaler, raw_data,
+                   threshold=0.5):
+    """
+    Predict with scaler.transform() first.
+    Used for Stroke and Diabetes models.
+    """
     if model is None:
-        raise HTTPException(status_code=503, detail="Model not loaded")
-    if scaler is None:
-        raise HTTPException(status_code=503, detail="Scaler not loaded")
-    if feature_names is None:
-        raise HTTPException(status_code=503, detail="Feature list not loaded")
+        raise HTTPException(503, "Model not loaded")
 
     data = dict(raw_data)
 
-    try:
-        df = pd.DataFrame([data])[feature_names]
-    except KeyError as e:
-        raise HTTPException(status_code=422, detail=f"Missing feature: {e}")
+    if feature_names is not None:
+        try:
+            df = pd.DataFrame([data])[feature_names]
+        except KeyError as e:
+            raise HTTPException(422, f"Missing feature: {e}")
+    else:
+        df = pd.DataFrame([data])
 
-    X_scaled = scaler.transform(df)
-    proba = float(model.predict_proba(X_scaled)[0][1])
+    # Scale if scaler exists
+    if scaler is not None:
+        try:
+            X = scaler.transform(df)
+        except Exception as e:
+            raise HTTPException(
+                500, f"Scaler error: {e}. Trying without scaler."
+            )
+    else:
+        # No scaler → use raw
+        X = df
+
+    proba = float(model.predict_proba(X)[0][1])
     pred  = int(proba >= threshold)
 
     return {
-        "prediction": pred,
+        "prediction" : pred,
         "probability": round(proba, 4),
-        "risk_level": "HIGH" if pred == 1 else "LOW",
-        "threshold": threshold
+        "risk_level" : "HIGH" if pred == 1 else "LOW",
+        "threshold"  : threshold,
     }
 
 
@@ -219,7 +247,11 @@ def serve_frontend():
         with open(index_path, encoding="utf-8") as f:
             return f.read()
     except FileNotFoundError:
-        return "<h1>Frontend not found</h1><p>Expected: frontend/index.html</p>"
+        return """
+        <h1>Frontend not found</h1>
+        <p>Expected: frontend/index.html</p>
+        <p>Go to <a href='/health'>/health</a> to check API status</p>
+        """
 
 
 # ============================================================
@@ -231,28 +263,32 @@ def health_check():
     return {
         "status": "running",
         "paths": {
-            "project_dir": str(PROJECT_DIR),
-            "models_dir": str(MODELS_DIR),
+            "project_dir" : str(PROJECT_DIR),
+            "models_dir"  : str(MODELS_DIR),
             "frontend_dir": str(FRONTEND_DIR),
         },
         "models": {
-            "heart_model": "loaded" if heart_model else "not found",
-            "heart_features": "loaded" if heart_features else "not found",
-            "heart_meta": "loaded" if heart_meta else "not found",
-
-            "stroke_model": "loaded" if stroke_model else "not found",
-            "stroke_features": "loaded" if stroke_features else "not found",
-            "stroke_scaler": "loaded" if stroke_scaler else "not found",
-
-            "diabetes_model": "loaded" if diabetes_model else "not found",
-            "diabetes_features": "loaded" if diabetes_features else "not found",
-            "diabetes_scaler": "loaded" if diabetes_scaler else "not found",
+            "heart": {
+                "model"   : "✅" if heart_model    else "❌",
+                "features": "✅" if heart_features  else "❌",
+                "meta"    : "✅" if heart_meta      else "❌",
+            },
+            "stroke": {
+                "model"   : "✅" if stroke_model    else "❌",
+                "features": "✅" if stroke_features  else "❌",
+                "scaler"  : "✅" if stroke_scaler    else "❌",
+            },
+            "diabetes": {
+                "model"   : "✅" if diabetes_model    else "❌",
+                "features": "✅" if diabetes_features  else "❌",
+                "scaler"  : "✅" if diabetes_scaler    else "❌",
+            },
         },
         "thresholds": {
-            "heart": heart_threshold,
-            "stroke": stroke_threshold,
+            "heart"   : heart_threshold,
+            "stroke"  : stroke_threshold,
             "diabetes": diabetes_threshold,
-        }
+        },
     }
 
 
@@ -263,18 +299,24 @@ def health_check():
 @app.post("/predict/heart")
 def predict_heart(data: dict):
     """
-    Expected from frontend:
+    Input (10 fields from frontend):
     {
-      age, gender, ap_hi, ap_lo, cholesterol,
-      gluc, smoke, alco, active, bmi
+      "age": 50, "gender": 1,
+      "ap_hi": 140, "ap_lo": 90,
+      "cholesterol": 2, "gluc": 1,
+      "smoke": 0, "alco": 0,
+      "active": 1, "bmi": 28.0
     }
+
+    → engineer_heart_features adds 4 more
+    → total 14 features for prediction
     """
-    return predict_with_dataframe(
-        model=heart_model,
-        feature_names=heart_features,
-        raw_data=data,
-        threshold=heart_threshold,
-        engineer_fn=engineer_heart_features
+    return predict_direct(
+        model        = heart_model,
+        feature_names= heart_features,
+        raw_data     = data,
+        threshold    = heart_threshold,
+        engineer_fn  = engineer_heart_features,
     )
 
 
@@ -285,14 +327,27 @@ def predict_heart(data: dict):
 @app.post("/predict/stroke")
 def predict_stroke(data: dict):
     """
-    Expected keys should match stroke feature_list.pkl
+    Input (15 fields from frontend):
+    {
+      "gender": 1, "age": 50,
+      "hypertension": 0, "heart_disease": 0,
+      "ever_married": 1, "Residence_type": 1,
+      "avg_glucose_level": 100, "bmi": 25,
+      "work_type_Private": 1,
+      "work_type_Self-employed": 0,
+      "work_type_children": 0,
+      "smoking_status_formerly smoked": 0,
+      "smoking_status_never smoked": 1,
+      "smoking_status_smokes": 0,
+      "is_elderly": 0
+    }
     """
-    return predict_with_scaler(
-        model=stroke_model,
-        feature_names=stroke_features,
-        scaler=stroke_scaler,
-        raw_data=data,
-        threshold=stroke_threshold
+    return predict_scaled(
+        model        = stroke_model,
+        feature_names= stroke_features,
+        scaler       = stroke_scaler,
+        raw_data     = data,
+        threshold    = stroke_threshold,
     )
 
 
@@ -303,14 +358,26 @@ def predict_stroke(data: dict):
 @app.post("/predict/diabetes")
 def predict_diabetes(data: dict):
     """
-    Expected keys should match diabetes feature_list.pkl
+    Input (13 fields from frontend):
+    {
+      "gender": 1, "age": 40,
+      "hypertension": 0, "heart_disease": 0,
+      "bmi": 27, "hbA1c_level": 5.5,
+      "blood_glucose_level": 100,
+      "smoking_history_No Info": 0,
+      "smoking_history_current": 0,
+      "smoking_history_ever": 0,
+      "smoking_history_former": 0,
+      "smoking_history_never": 1,
+      "smoking_history_not current": 0
+    }
     """
-    return predict_with_scaler(
-        model=diabetes_model,
-        feature_names=diabetes_features,
-        scaler=diabetes_scaler,
-        raw_data=data,
-        threshold=diabetes_threshold
+    return predict_scaled(
+        model        = diabetes_model,
+        feature_names= diabetes_features,
+        scaler       = diabetes_scaler,
+        raw_data     = data,
+        threshold    = diabetes_threshold,
     )
 
 
@@ -320,4 +387,8 @@ def predict_diabetes(data: dict):
 
 if __name__ == "__main__":
     import uvicorn
+    print("\n🚀 Starting server...")
+    print("   Open: http://127.0.0.1:8000")
+    print("   Health: http://127.0.0.1:8000/health")
+    print("   Docs: http://127.0.0.1:8000/docs\n")
     uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
